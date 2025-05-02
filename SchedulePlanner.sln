@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.35731.53
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulePlanner", "SchedulePlanner\SchedulePlanner.csproj", "{5BD049E1-E659-4532-A2D1-39A5188A9BB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulePlanner.Db", "SchedulePlanner.Db\SchedulePlanner.Db.csproj", "{2D25C2FB-7930-41CA-AFE0-D38DCC73EC77}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5BD049E1-E659-4532-A2D1-39A5188A9BB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BD049E1-E659-4532-A2D1-39A5188A9BB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BD049E1-E659-4532-A2D1-39A5188A9BB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BD049E1-E659-4532-A2D1-39A5188A9BB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D25C2FB-7930-41CA-AFE0-D38DCC73EC77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D25C2FB-7930-41CA-AFE0-D38DCC73EC77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D25C2FB-7930-41CA-AFE0-D38DCC73EC77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D25C2FB-7930-41CA-AFE0-D38DCC73EC77}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A868C715-F850-475D-AB75-558263863623}
+	EndGlobalSection
+EndGlobal
