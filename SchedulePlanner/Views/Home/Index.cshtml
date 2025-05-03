@@ -1,18 +1,170 @@
-﻿@{
+﻿@model List<LessonViewModel>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
 
-<div>
-    @if (User.Identity?.IsAuthenticated == true)
-    {
-<a asp-controller="Account" asp-action="Logout">Выход</a> }
+
+
+<div class="row">
+    <div class="col-md-4">
+        <div id="calendar"></div>
+    </div>
+    <div class="col-md-8">
+        <div id="lessonsContainer" class="mt-4">
+            @if (Model == null || Model.Count == 0)
+            {
+                <p>Нет занятий на выбранную дату.</p>
+            }
             else
             {
-<a asp-controller="Account" asp-action="Login">Вход</a>
-                <a asp-controller="Account" asp-action="Register">Регистрация</a>}
+                @foreach (var lesson in Model.OrderBy(l => l.StartTime))
+                {
+                    <a class="lesson-link" href="@Url.Action("Details", "Lesson", new { lessonId = lesson.Id, date = ViewBag.Date.ToString("yyyy-MM-dd") })">
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <strong>@lesson.SubjectName</strong><br />
+                                @lesson.StartTime.ToString(@"hh\:mm") - @lesson.EndTime.ToString(@"hh\:mm")
+                            </div>
+                        </div>
+                    </a>
+                }
+            }
+        </div>
+        <a class="btn btn-primary mt-3" href="@Url.Action("Create", "Lesson", new { date = ViewBag.SelectedDate.ToString("yyyy-MM-dd") })">Добавить предмет</a>
+
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        /*document.getElementById("selectedDate").addEventListener("change", function () {
+            const date = this.value;
+            window.location.href = `/Home/Index?date=${date}`;
+        });*/
+
+        // script.js
+
+        const calendar = document.getElementById('calendar');
+
+        const currentDate = new Date("@ViewBag.SelectedDate.ToString("yyyy-MM-dd")");
+        let currentYear = currentDate.getFullYear();
+        let currentMonth = currentDate.getMonth();
+        let currentDay = currentDate.getDate();
+
+        function renderCalendar(year, month) {
+            const daysInMonth = getDaysInMonth(year, month);
+            const firstDayOfMonth = new Date(year, month, 1).getDay(); // Начальный день месяца (0 - воскресенье)
+
+            // Очищаем старый календарь
+            calendar.innerHTML = '';
+
+            // Создаем заголовок с кнопками для предыдущего/следующего месяца
+            const header = document.createElement('div');
+            header.className = 'calendar-header';
+            const prevButton = document.createElement('button');
+            prevButton.textContent = '<';
+            const nextButton = document.createElement('button');
+            nextButton.textContent = '>';
+            const monthName = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+            const yearMonth = document.createElement('span');
+            yearMonth.textContent = `${monthName[month]} ${year}`;
+            header.appendChild(prevButton);
+            header.appendChild(yearMonth);
+            header.appendChild(nextButton);
+
+            // Добавляем обработчики событий для кнопок
+            prevButton.addEventListener('click', () => changeMonth(-1));
+            nextButton.addEventListener('click', () => changeMonth(1));
+
+            calendar.appendChild(header);
+
+            // Создаем таблицу для дней
+            const table = document.createElement('table');
+            table.className = 'calendar-table';
+
+            // Заголовок столбцов (дни недели)
+            const weekHeader = document.createElement('tr');
+            const daysOfWeek = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+            daysOfWeek.forEach(day => {
+                const th = document.createElement('th');
+                th.textContent = day;
+                weekHeader.appendChild(th);
+            });
+            table.appendChild(weekHeader);
+
+            // Генерируем строки с днями
+            const tbody = document.createElement('tbody');
+
+            let dayCounter = 1;
+            for (let week = 0; week < 6; week++) {
+                const row = document.createElement('tr');
+
+                for (let day = 0; day < 7; day++) {
+                    const cell = document.createElement('td');
+
+                    if (week === 0 && day < firstDayOfMonth) {
+                        cell.textContent = '';
+                    } else if (dayCounter <= daysInMonth) {
+                        cell.textContent = dayCounter;
+                        cell.addEventListener('click', () => selectDate(cell.textContent));
+
+                        const selectedDate = new Date(year, month, dayCounter);
+                        const yyyy = selectedDate.getFullYear();
+                        const mm = String(selectedDate.getMonth() + 1).padStart(2, '0');
+                        const dd = String(selectedDate.getDate()).padStart(2, '0');
+                        const formattedDate = `${yyyy}-${mm}-${dd}`;
+                        cell.dataset.date = formattedDate;
+                        cell.addEventListener('click', () => {
+                            const date = cell.dataset.date;
+                            window.location.href = `/Home/Index?selectedDate=${date}`;
+                        });
+
+                        dayCounter++;
+                    }
+
+                    row.appendChild(cell);
+                }
+
+                tbody.appendChild(row);
+            }
+
+            table.appendChild(tbody);
+            calendar.appendChild(table);
+        }
+
+        function getDaysInMonth(year, month) {
+            return new Date(year, month + 1, 0).getDate();
+        }
+
+        function changeMonth(direction) {
+            currentMonth += direction;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar(currentYear, currentMonth);
+        }
+
+        function selectDate(day) {
+            const cells = document.querySelectorAll('.calendar-table td');
+            cells.forEach(cell => cell.classList.remove('active'));
+
+            const selectedCell = Array.from(cells).find(cell => cell.textContent === String(day));
+
+            if (selectedCell) {
+                selectedCell.classList.add('active'); // Добавляем активный класс
+            }
+        }
+
+        // Инициализация календаря
+
+        renderCalendar(currentYear, currentMonth);
+        selectDate(currentDay);
+    </script>
+
+
+}

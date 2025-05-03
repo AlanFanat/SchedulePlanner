@@ -1,0 +1,95 @@
+﻿.lesson-link:active,
+.lesson-link:hover,
+.lesson-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+    .lesson-link .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+    }
+
+        .lesson-link .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            background-color: #f8f9fa;
+        }
+
+
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+#calendar {
+    width: 300px;
+    margin: 20px auto;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #e9ecef;
+    color: #333;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+}
+
+    .calendar-header button {
+        background: none;
+        border: none;
+        color: #333;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+.calendar-body {
+    padding: 10px;
+}
+
+.calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .calendar-table th,
+    .calendar-table td {
+        text-align: center;
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .calendar-table th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+    }
+
+    .calendar-table td {
+        cursor: pointer;
+    }
+
+    .calendar-table td, .calendar-table th {
+        width: 45px;
+        height: 45px;
+        text-align: center;
+        vertical-align: middle;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+        .calendar-table td.active {
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 50%;
+        }

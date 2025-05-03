@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace SchedulePlanner.Db.Models
@@ -18,15 +19,20 @@ namespace SchedulePlanner.Db.Models
 
         public DateTime StartDate { get; set; }
         public int LessonsCount { get; set; }
+        [NotMapped]
+        public DateTime EndDate => StartDate.AddDays( (int)RecurrenceType * LessonsCount);
 
         public TimeSpan StartTime { get; set; }
         public int DurationMinutes { get; set; }
+        [NotMapped]
+        public TimeSpan EndTime => StartTime + TimeSpan.FromMinutes(DurationMinutes);
+
         public string Location { get; set; }
 
         public Guid? TeacherId { get; set; }
         public Teacher Teacher { get; set; }
 
-        public TimeSpan EndTime => StartTime + TimeSpan.FromMinutes(DurationMinutes);
+        
         public string SubjectName => Subject.Name;
         public string TeacherName => Teacher.Name;
     }

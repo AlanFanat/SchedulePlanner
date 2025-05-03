@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SchedulePlanner.Db.Models;
+using SchedulePlanner.Db.Services;
 using SchedulePlanner.Models;
+using SchedulePlanner.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,15 +18,38 @@ namespace SchedulePlanner.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<User> userManager;
+        private readonly IScheduleService scheduleService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, IScheduleService scheduleService)
         {
             _logger = logger;
+            this.userManager = userManager;
+            this.scheduleService = scheduleService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(DateTime? selectedDate)
         {
-            return View();
+            var date = selectedDate ?? DateTime.Today;
+            ViewBag.SelectedDate = date;
+
+            var user = await userManager.GetUserAsync(User); // Получаем текущего пользователя
+
+            if (user != null)
+            {
+                var userId = user.Id;       // ID пользователя
+                var userName = user.UserName; // Имя пользователя
+                var periodId = user.SelectedPeriodId.GetValueOrDefault(); //Выбранный период
+                if (periodId == Guid.Empty)
+                {
+                    return RedirectToAction("Index", "Period");
+                }
+                var lessons = scheduleService.GetLessonsForDay(periodId, date);
+                var lessonViewModels = lessons.Select(lesson => LessonViewModel.FromModel(lesson)).ToList();
+                return View(lessonViewModels);
+            }
+
+            return NotFound();
         }
 
         public IActionResult Privacy()

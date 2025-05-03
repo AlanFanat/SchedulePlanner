@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SchedulePlanner.Db;
 using SchedulePlanner.Db.Models;
+using SchedulePlanner.Db.Repositories;
+using SchedulePlanner.Db.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +44,13 @@ namespace SchedulePlanner
                     IsEssential = true
                 };
             });
+
+            services.AddScoped<IPeriodRepository, PeriodDbRepository>();
+            services.AddScoped<ILessonRepository, LessonDbRepository>();
+            services.AddScoped<ILessonTaskRepository, LessonTaskDbRepository>();
+            services.AddScoped<ISubjectRepository, SubjectDbRepository>();
+            services.AddScoped<ITeacherRepository, TeacherDbRepository>();
+            services.AddScoped<IScheduleService, ScheduleService>();
 
             services.AddControllersWithViews();
         }
