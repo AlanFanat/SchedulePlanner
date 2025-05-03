@@ -13,5 +13,7 @@ namespace SchedulePlanner.Db.Models
         public string Name { get; set; }
         public string Number { get; set; }
         public string Address { get; set; }
+
+        public List<Lesson> Lessons { get; set; } = new List<Lesson>();
     }
 }

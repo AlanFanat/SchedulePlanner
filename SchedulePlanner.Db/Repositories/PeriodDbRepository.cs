@@ -20,7 +20,6 @@ namespace SchedulePlanner.Db.Repositories
         {
             return _context.Periods
                 .Include(p => p.Lessons)
-                .Include(p => p.Exams)
                 .Include(p => p.LessonTasks)
                 .Include(p => p.Subjects)
                 .Include(p => p.Teachers)

@@ -10,8 +10,8 @@ using SchedulePlanner.Db;
 namespace SchedulePlanner.Db.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20250502162133_IdentityInit")]
-    partial class IdentityInit
+    [Migration("20250503095109_InitIdentity")]
+    partial class InitIdentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -196,6 +196,9 @@ namespace SchedulePlanner.Db.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("SelectedPeriodId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");

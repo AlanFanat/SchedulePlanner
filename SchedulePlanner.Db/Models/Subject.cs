@@ -12,5 +12,9 @@ namespace SchedulePlanner.Db.Models
 
         public string Name { get; set; }
         public string Color { get; set; }
+
+        public List<Lesson> Lessons { get; set; } = new List<Lesson>();
+
+        public List<LessonTask> LessonTasks { get; set; } = new List<LessonTask>();
     }
 }
