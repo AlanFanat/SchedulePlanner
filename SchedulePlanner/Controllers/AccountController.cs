@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using SchedulePlanner.Models; // Замените на ваш namespace
-using SchedulePlanner.ViewModels; // Папка с моделями представлений
+using SchedulePlanner.ViewModels; 
 using SchedulePlanner.Db.Models;
 
 namespace SchedulePlanner.Controllers
