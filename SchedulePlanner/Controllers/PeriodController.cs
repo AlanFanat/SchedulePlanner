@@ -29,7 +29,7 @@ namespace SchedulePlanner.Controllers
             return View(periodViewModels);
         }
         [HttpPost]
-        public async Task<IActionResult> SelectPeriodAsync(Guid periodId)
+        public async Task<IActionResult> Select(Guid periodId)
         {
             var user = await userManager.GetUserAsync(User);
             user.SelectedPeriodId = periodId;
@@ -39,6 +39,32 @@ namespace SchedulePlanner.Controllers
                 return RedirectToAction("Index");
             }
             return NotFound();
+        }
+        public IActionResult CreatePeriod()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreatePeriod(PeriodViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var period = new Period
+            {
+                Id = Guid.NewGuid(),
+                Name = model.Name,
+                StartDate = model.StartDate,
+                EndDate = model.EndDate,
+                UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))
+            };
+
+            periodRepository.Add(period);
+
+            // Обновляем выбранный период
+           
+
+            return RedirectToAction("Index", "Period");
         }
     }
 }
