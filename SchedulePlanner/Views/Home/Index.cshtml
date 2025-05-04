@@ -20,7 +20,7 @@
             {
                 @foreach (var lesson in Model.OrderBy(l => l.StartTime))
                 {
-                    <a class="lesson-link" href="@Url.Action("Details", "Lesson", new { lessonId = lesson.Id, date = ViewBag.Date.ToString("yyyy-MM-dd") })">
+                    <a class="lesson-link" href="@Url.Action("Index", "Lesson", new { lessonId = lesson.Id})">
                         <div class="card mb-2">
                             <div class="card-body">
                                 <strong>@lesson.SubjectName</strong><br />

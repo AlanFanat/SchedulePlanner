@@ -23,8 +23,7 @@ namespace SchedulePlanner.Db.Repositories
         public IEnumerable<Subject> GetByPeriodId(Guid periodId)
         {
             return _context.Subjects
-                .Where(s => s.PeriodId == periodId)
-                .ToList();
+                .Where(s => s.PeriodId == periodId);
         }
 
         public void Add(Subject subject)

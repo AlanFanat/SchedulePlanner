@@ -1,4 +1,5 @@
-﻿using SchedulePlanner.Db.Models;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using SchedulePlanner.Db.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +10,32 @@ namespace SchedulePlanner.ViewModels
     public class LessonViewModel
     {
         public Guid Id { get; set; }
-        public string SubjectName { get; set; }
+
+        public Guid PeriodId { get; set; }
+        public Period Period { get; set; }
+
+        public Guid SubjectId { get; set; }
+        public Subject Subject { get; set; }
+        public string SubjectName { get; set; } // Для отображения выбранного предмета
+        public List<SelectListItem> Subjects { get; set; } // Для выпадающего списка
+        public string SubjectIdRaw { get; set; }
         public LessonType LessonType { get; set; }
 
+        public RecurrenceType RecurrenceType { get; set; }
         public DateTime StartDate { get; set; }
+        public int RepeatsCount { get; set; }
+
         public TimeSpan StartTime { get; set; }
         public int DurationMinutes { get; set; }
 
-        public string TeacherName { get; set; }
         public string Location { get; set; }
+        public Guid? TeacherId { get; set; }
+        public Teacher Teacher { get; set; }
 
-        // Вычисляемое свойство
+        public DateTime EndDate => StartDate.AddDays((int)RecurrenceType * RepeatsCount);
         public TimeSpan EndTime => StartTime + TimeSpan.FromMinutes(DurationMinutes);
+        //public string SubjectName => Subject?.Name;
+        public string TeacherName => Teacher?.Name;
         public static LessonViewModel FromModel(Lesson lesson)
         {
             if (lesson == null)
@@ -29,12 +44,16 @@ namespace SchedulePlanner.ViewModels
             return new LessonViewModel
             {
                 Id = lesson.Id,
-                SubjectName = lesson.Subject?.Name ?? "Без предмета",
+                PeriodId = lesson.PeriodId,
+                Subject = lesson.Subject,
+                SubjectId = lesson.SubjectId,
                 LessonType = lesson.LessonType,
+                RecurrenceType = lesson.RecurrenceType,
+                RepeatsCount = lesson.RepeatsCount,
                 StartDate = lesson.StartDate,
                 StartTime = lesson.StartTime,
                 DurationMinutes = lesson.DurationMinutes,
-                TeacherName = lesson.Teacher?.Name,
+                Teacher = lesson.Teacher,
                 Location = lesson.Location
             };
         }

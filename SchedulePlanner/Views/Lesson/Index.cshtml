@@ -1,0 +1,57 @@
+﻿@model LessonViewModel
+
+@{
+    ViewData["Title"] = "Информация о предмете";
+}
+
+
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Предмет</dt>
+            <dd class="col-sm-9">@Model.Subject?.Name</dd>
+
+            <dt class="col-sm-3">Тип занятия</dt>
+            <dd class="col-sm-9">@Model.LessonType</dd>
+
+            <dt class="col-sm-3">Периодичность</dt>
+            <dd class="col-sm-9">@Model.RecurrenceType</dd>
+
+            <dt class="col-sm-3">Дата первого занятия</dt>
+            <dd class="col-sm-9">@Model.StartDate.ToShortDateString()</dd>
+
+            <dt class="col-sm-3">Дата последнего занятия</dt>
+            <dd class="col-sm-9">@Model.EndDate.ToShortDateString()</dd>
+
+            <dt class="col-sm-3">Количество повторений</dt>
+            <dd class="col-sm-9">@Model.RepeatsCount</dd>
+
+            <dt class="col-sm-3">Начало занятия</dt>
+            <dd class="col-sm-9">@Model.StartTime</dd>
+
+            <dt class="col-sm-3">Конец занятия</dt>
+            <dd class="col-sm-9">@Model.EndTime</dd>
+
+            <dt class="col-sm-3">Длительность (минут)</dt>
+            <dd class="col-sm-9">@Model.DurationMinutes</dd>
+
+            <dt class="col-sm-3">Место проведения</dt>
+            <dd class="col-sm-9">@Model.Location</dd>
+
+            <dt class="col-sm-3">Преподаватель</dt>
+            <dd class="col-sm-9">@Model.Teacher?.Name</dd>
+        </dl>
+    </div>
+</div>
+
+
+<a asp-controller="Home" asp-action="Index" asp-route-date="" class="btn btn-primary mt-3">
+    Назад к расписанию
+</a>
+<a asp-action="Edit" asp-route-lessonId="@Model.Id" asp-route-date="" class="btn btn-warning mt-3">
+    Редактировать
+</a>
+

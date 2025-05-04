@@ -1,0 +1,92 @@
+﻿@model LessonViewModel
+
+<h2>Create Lesson</h2>
+
+<form asp-controller="Lesson" asp-action="Create" method="post" id="mainForm">
+    <!-- Все существующие поля формы -->
+    <div class="form-group">
+        <label asp-for="SubjectIdRaw"></label>
+        <select id="subjectSelect" asp-for="SubjectIdRaw" class="form-control" asp-items="Model.Subjects">
+            <option value="">-- Выберите предмет --</option>
+            <option value="add_new">Добавить новый предмет</option>
+        </select>
+    </div>
+    <!-- Остальные поля формы -->
+    <input type="submit" value="Сохранить" class="btn btn-primary" />
+</form>
+
+<!-- Модальное окно для добавления предмета -->
+<div class="modal fade" id="subjectModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавить новый предмет</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="subjectModalBody">
+                <!-- Здесь будет загружена форма добавления предмета -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" id="saveSubjectBtn">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Обработчик выбора "Добавить новый предмет"
+            $('#subjectSelect').change(function() {
+                if ($(this).val() === "add_new") {
+                    // Открываем модальное окно
+                    $('#subjectModal').modal('show');
+                    // Загружаем форму добавления предмета
+                    $('#subjectModalBody').load('@Url.Action("LoadSubjectForm", "Lesson")');
+                    // Сбрасываем выбор
+                    $(this).val('');
+                }
+            });
+
+            // Обработчик сохранения предмета
+            $('#saveSubjectBtn').click(function() {
+                var form = $('#addSubjectForm');
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: form.serialize(),
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#subjectModal').modal('hide');
+                            // Обновляем список предметов
+                            $.get('@Url.Action("GetSubjects", "Lesson")', function(data) {
+                                $('#subjectSelect').empty();
+                                $('#subjectSelect').append('<option value="">-- Выберите предмет --</option>');
+                                $('#subjectSelect').append('<option value="add_new">Добавить новый предмет</option>');
+                                $.each(data, function(index, item) {
+                                    $('#subjectSelect').append($('<option>', {
+                                        value: item.value,
+                                        text: item.text
+                                    }));
+                                });
+                            });
+                            alert("Предмет успешно добавлен!");
+                        } else {
+                            $('#subjectModalBody').html(response);
+                        }
+                    },
+                    error: function(xhr) {
+                        alert("Ошибка при сохранении предмета: " + xhr.statusText);
+                    }
+                });
+            });
+        });
+    </script>
+}
