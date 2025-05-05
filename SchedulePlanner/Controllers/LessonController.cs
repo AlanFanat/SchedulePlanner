@@ -62,7 +62,40 @@ namespace SchedulePlanner.Controllers
 
             return View(model);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(LessonViewModel model)
+        {
+            Guid subjectId;
+            if (!Guid.TryParse(model.SubjectIdRaw, out subjectId))
+            {
+                ModelState.AddModelError("SubjectIdRaw", "Выберите предмет");
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await userManager.GetUserAsync(User);
+            var periodId = user.SelectedPeriodId.GetValueOrDefault();
+            var lesson = new Lesson
+            {
+                Id = Guid.NewGuid(),
+                PeriodId = periodId,
+                SubjectId = subjectId,
+                LessonType = model.LessonType,
+                RecurrenceType = model.RecurrenceType,
+                StartDate = model.StartDate,
+                RepeatsCount = model.RepeatsCount,
+                StartTime = model.StartTime,
+                DurationMinutes = model.DurationMinutes,
+                Location = model.Location,
+                TeacherId = model.TeacherId
+            };
 
+            lessonRepository.Add(lesson);
+
+            return RedirectToAction("Index", new { lessonId = lesson.Id });
+        }
         // Загрузка формы (GET)
         public IActionResult LoadSubjectForm()
         {

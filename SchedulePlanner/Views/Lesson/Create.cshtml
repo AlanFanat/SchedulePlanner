@@ -3,7 +3,6 @@
 <h2>Create Lesson</h2>
 
 <form asp-controller="Lesson" asp-action="Create" method="post" id="mainForm">
-    <!-- Все существующие поля формы -->
     <div class="form-group">
         <label asp-for="SubjectIdRaw"></label>
         <select id="subjectSelect" asp-for="SubjectIdRaw" class="form-control" asp-items="Model.Subjects">
@@ -11,8 +10,64 @@
             <option value="add_new">Добавить новый предмет</option>
         </select>
     </div>
-    <!-- Остальные поля формы -->
-    <input type="submit" value="Сохранить" class="btn btn-primary" />
+    <div class="form-group mb-3">
+        <label asp-for="LessonType" class="form-label"></label>
+        <select asp-for="LessonType" asp-items="Html.GetEnumSelectList<LessonType>()" class="form-control">
+            <option selected="selected" value="">-- Выберите тип --</option>
+        </select>
+        <span asp-validation-for="LessonType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="RecurrenceType" class="form-label"></label>
+        <select asp-for="RecurrenceType" asp-items="Html.GetEnumSelectList<RecurrenceType>()" class="form-control">
+            <option selected="selected" value="">-- Выберите периодичность --</option>
+        </select>
+        <span asp-validation-for="RecurrenceType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="StartDate" class="form-label"></label>
+        <input asp-for="StartDate" class="form-control" type="date" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="RepeatsCount" class="form-label"></label>
+        <input asp-for="RepeatsCount" class="form-control" />
+        <span asp-validation-for="RepeatsCount" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="StartTime" class="form-label"></label>
+        <input asp-for="StartTime" class="form-control" type="time" />
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="DurationMinutes" class="form-label"></label>
+        <input asp-for="DurationMinutes" class="form-control" type="number" min="10" max="300" />
+        <span asp-validation-for="DurationMinutes" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Location" class="form-label"></label>
+        <input asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="TeacherId" class="form-label"></label>
+        <select asp-for="TeacherId" asp-items="Model.Teachers" class="form-control">
+            <option value="">-- Без преподавателя --</option>
+        </select>
+        <span asp-validation-for="TeacherId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-3">
+        <input type="submit" value="Сохранить" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+    </div>
 </form>
 
 <!-- Модальное окно для добавления предмета -->

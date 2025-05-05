@@ -16,7 +16,7 @@ namespace SchedulePlanner.ViewModels
 
         public Guid SubjectId { get; set; }
         public Subject Subject { get; set; }
-        public string SubjectName { get; set; } // Для отображения выбранного предмета
+       
         public List<SelectListItem> Subjects { get; set; } // Для выпадающего списка
         public string SubjectIdRaw { get; set; }
         public LessonType LessonType { get; set; }
@@ -31,10 +31,12 @@ namespace SchedulePlanner.ViewModels
         public string Location { get; set; }
         public Guid? TeacherId { get; set; }
         public Teacher Teacher { get; set; }
+        public List<SelectListItem> Teachers { get; set; } // Для выпадающего списка
 
         public DateTime EndDate => StartDate.AddDays((int)RecurrenceType * RepeatsCount);
         public TimeSpan EndTime => StartTime + TimeSpan.FromMinutes(DurationMinutes);
-        //public string SubjectName => Subject?.Name;
+
+        public string SubjectName => Subject?.Name; // Для отображения выбранного предмета
         public string TeacherName => Teacher?.Name;
         public static LessonViewModel FromModel(Lesson lesson)
         {
@@ -57,5 +59,7 @@ namespace SchedulePlanner.ViewModels
                 Location = lesson.Location
             };
         }
+
     }
+    
 }
