@@ -33,7 +33,18 @@ namespace SchedulePlanner
             services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connection));
 
             services.AddDbContext<IdentityContext>(options => options.UseSqlServer(connection));
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
+            services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequiredLength = 6;
+            })
+            .AddEntityFrameworkStores<IdentityContext>()
+            .AddDefaultTokenProviders()
+            .AddErrorDescriber<PlannerErrorDescriber>();
+
             services.ConfigureApplicationCookie(options =>
             {
                 options.ExpireTimeSpan = TimeSpan.FromHours(8);
@@ -44,6 +55,7 @@ namespace SchedulePlanner
                     IsEssential = true
                 };
             });
+            
 
             services.AddScoped<IPeriodRepository, PeriodDbRepository>();
             services.AddScoped<ILessonRepository, LessonDbRepository>();

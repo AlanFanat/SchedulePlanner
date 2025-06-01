@@ -7,7 +7,6 @@ using SchedulePlanner.Db.Services;
 using SchedulePlanner.Models;
 using SchedulePlanner.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,11 +29,12 @@ namespace SchedulePlanner.Controllers
 
         public async Task<IActionResult> Index(DateTime? selectedDate)
         {
+            //если выбран какой-то день, то будут загружены его данные,
+            //иначе будут загружены данные сегодняшего дня
             var date = selectedDate ?? DateTime.Today;
             ViewBag.SelectedDate = date;
 
             var user = await userManager.GetUserAsync(User); // Получаем текущего пользователя
-
             if (user != null)
             {
                 var userId = user.Id;       // ID пользователя
@@ -48,7 +48,7 @@ namespace SchedulePlanner.Controllers
                 var lessonViewModels = lessons.Select(lesson => LessonViewModel.FromModel(lesson)).ToList();
                 return View(lessonViewModels);
             }
-
+            _logger.LogWarning("User not found.");
             return NotFound();
         }
 

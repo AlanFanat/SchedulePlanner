@@ -1,28 +1,46 @@
 ﻿@model SchedulePlanner.ViewModels.LoginViewModel
 @{ ViewData["Title"] = "Вход"; }
 
-<h2>Вход</h2>
+<div class="container d-flex justify-content-center">
+    <div class="card shadow-sm w-100" style="max-width: 400px;">
+        <div class="card-body">
+            <h4 class="card-title text-center mb-4">Вход</h4>
 
-<form asp-action="Login" method="post">
-    <input type="hidden" asp-for="ReturnUrl" />
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <div class="checkbox">
-            <label asp-for="RememberMe">
-                <input asp-for="RememberMe" />
-                @Html.DisplayNameFor(m => m.RememberMe)
-            </label>
+            <form asp-action="Login" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-3">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Password"></label>
+                    <div class="input-group">
+                        <input id="passwordInput" asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()">👁</button>
+                    </div>
+                </div>
+
+                <div class="d-grid mb-3">
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                </div>
+
+                <div class="text-center">
+                    <a asp-area="" asp-controller="Account" asp-action="Register">Нет аккаунта? Зарегистрируйтесь</a>
+                </div>
+            </form>
         </div>
     </div>
-    <button type="submit" class="btn btn-primary">Войти</button>
-</form>
+</div>
+
+@section Scripts
+{
+    <script>
+        function togglePassword() {
+            const input = document.getElementById("passwordInput");
+            input.type = input.type === "password" ? "text" : "password";
+        }
+    </script>
+}

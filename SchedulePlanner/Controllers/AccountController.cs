@@ -3,24 +3,22 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using SchedulePlanner.ViewModels; 
 using SchedulePlanner.Db.Models;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace SchedulePlanner.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly ILogger<AccountController> _logger;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(ILogger<AccountController> logger ,UserManager<User> userManager, SignInManager<User> signInManager)
         {
+            _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
-        }
-
-        // GET: /<controller>/
-        public IActionResult Index()
-        {
-            return RedirectToAction("Login");
         }
 
         [HttpGet]
@@ -41,12 +39,28 @@ namespace SchedulePlanner.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation($"Пользователь {model.Email} успешно зарегистрирован");
                     return RedirectToAction("Index", "Home");
                 }
 
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError("", error.Description);
+                    switch (error.Code)
+                    {
+                        case "DuplicateUserName":
+                            ModelState.AddModelError("Email", error.Description);
+                            break;
+                        case "PasswordTooShort":
+                        case "PasswordRequiresDigit":
+                        case "PasswordRequiresUpper":
+                        case "PasswordRequiresLower":
+                        case "PasswordRequiresNonAlphanumeric":
+                            ModelState.AddModelError("Password", error.Description);
+                            break;
+                        default:
+                            ModelState.AddModelError("", error.Description);
+                            break;
+                    }
                 }
             }
 
@@ -54,15 +68,14 @@ namespace SchedulePlanner.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login(string returnUrl = null)
+        public IActionResult Login()
         {
-            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -70,25 +83,24 @@ namespace SchedulePlanner.Controllers
 
                 if (result.Succeeded)
                 {
-                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
                     return RedirectToAction("Index", "Home");
                 }
 
-                ModelState.AddModelError(string.Empty, "Неверный логин или пароль.");
+                ModelState.AddModelError("", "Неверный логин или пароль.");
             }
 
             return View(model);
         }
 
-        
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
     }
 }
+
+
+

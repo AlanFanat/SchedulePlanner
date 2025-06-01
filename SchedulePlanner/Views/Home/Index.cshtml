@@ -8,9 +8,11 @@
 
 <div class="row">
     <div class="col-md-4">
+        <div id="selectedDateOnCalendar"></div>
         <div id="calendar"></div>
     </div>
     <div class="col-md-8">
+        <div>Занятия</div>
         <div id="lessonsContainer" class="mt-4">
             @if (Model == null || Model.Count == 0)
             {
@@ -38,13 +40,7 @@
 
 @section Scripts {
     <script>
-        /*document.getElementById("selectedDate").addEventListener("change", function () {
-            const date = this.value;
-            window.location.href = `/Home/Index?date=${date}`;
-        });*/
-
-        // script.js
-
+        const selectedDateOnCalendar = document.getElementById('selectedDateOnCalendar');
         const calendar = document.getElementById('calendar');
 
         const currentDate = new Date("@ViewBag.SelectedDate.ToString("yyyy-MM-dd")");
@@ -54,8 +50,9 @@
 
         function renderCalendar(year, month) {
             const daysInMonth = getDaysInMonth(year, month);
-            const firstDayOfMonth = new Date(year, month, 1).getDay(); // Начальный день месяца (0 - воскресенье)
-
+            // Номер дня недели с которого начался месяц (переводим его в европейскую систему, чтобы понедельник был первым днем)
+            const firstDayOfMonth = (new Date(year, month, 1).getDay() + 6) % 7; 
+            
             // Очищаем старый календарь
             calendar.innerHTML = '';
 
@@ -85,7 +82,7 @@
 
             // Заголовок столбцов (дни недели)
             const weekHeader = document.createElement('tr');
-            const daysOfWeek = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+            const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
             daysOfWeek.forEach(day => {
                 const th = document.createElement('th');
                 th.textContent = day;

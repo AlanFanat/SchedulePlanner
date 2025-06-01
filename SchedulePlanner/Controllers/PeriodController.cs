@@ -40,12 +40,12 @@ namespace SchedulePlanner.Controllers
             }
             return NotFound();
         }
-        public IActionResult CreatePeriod()
+        public IActionResult Create()
         {
             return View();
         }
         [HttpPost]
-        public IActionResult CreatePeriod(PeriodViewModel model)
+        public IActionResult Create(PeriodViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);

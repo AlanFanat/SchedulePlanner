@@ -31,14 +31,14 @@ namespace SchedulePlanner.Db.Services
         }
         private bool IsLessonOnDay(Lesson lesson, DateTime targetDate)
         {
-            // Проверка, совпадает ли день занятия с targetDate
+            // Проверка, попадает ли занятие в указанную дату
             bool isCorrectDay = lesson.StartDate.Date <= targetDate.Date && lesson.EndDate >= targetDate.Date;
 
             if (!isCorrectDay)
             {
                 return false;
             }
-
+            //проверка повторяемости
             var recurrenceType = (int)lesson.RecurrenceType;
             return (targetDate - lesson.StartDate).Days % recurrenceType == 0;
         }
