@@ -1,17 +1,24 @@
 ﻿@model List<PeriodViewModel>
-<h2>Выберите период</h2>
+@if (Model.Count == 0)
+{
+    <h2>У вас не создано ни одного периода</h2>
+}
+else
+{
+    <h2>Выберите период</h2>
 
-<ul>
-    @foreach (var period in Model)
-    {
-        <li>
-            @period.Name (@period.StartDate.ToShortDateString() - @period.EndDate.ToShortDateString())
-            <form asp-action="Select" asp-controller="Period" method="post">
-                <input type="hidden" name="periodId" value="@period.Id" />
-                <button type="submit">Выбрать</button>
-            </form>
-        </li>
-    }
-</ul>
+    <ul>
+        @foreach (var period in Model)
+        {
+            <li>
+                @period.Name (@period.StartDate.ToShortDateString() - @period.EndDate.ToShortDateString())
+                <form asp-action="Select" asp-controller="Period" method="post">
+                    <input type="hidden" name="periodId" value="@period.Id" />
+                    <button type="submit">Выбрать</button>
+                </form>
+            </li>
+        }
+    </ul>
+}
 
 <a asp-action="Create" asp-controller="Period">Создать новый период</a>

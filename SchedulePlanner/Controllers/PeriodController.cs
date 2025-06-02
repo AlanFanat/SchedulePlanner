@@ -4,7 +4,6 @@ using SchedulePlanner.Db.Models;
 using SchedulePlanner.Db.Repositories;
 using SchedulePlanner.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
