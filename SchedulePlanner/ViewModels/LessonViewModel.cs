@@ -2,6 +2,7 @@
 using SchedulePlanner.Db.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,14 +19,19 @@ namespace SchedulePlanner.ViewModels
         public Subject Subject { get; set; }
        
         public List<SelectListItem> Subjects { get; set; } // Для выпадающего списка
+        [Display(Name = "Предмет")]
         public string SubjectIdRaw { get; set; }
+        [Display(Name = "Тип занятия")]
         public LessonType LessonType { get; set; }
-
+        [Display(Name = "Повторяемость")]
         public RecurrenceType RecurrenceType { get; set; }
+        [Display(Name = "Дата первого занятия")]
         public DateTime StartDate { get; set; }
+        [Display(Name = "Количество занятий")]
         public int RepeatsCount { get; set; }
-
+        [Display(Name = "Начало занятия")]
         public TimeSpan StartTime { get; set; }
+        [Display(Name = "Продолжительность")]
         public int DurationMinutes { get; set; }
 
         public string Location { get; set; }

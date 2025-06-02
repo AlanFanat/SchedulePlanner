@@ -109,7 +109,6 @@ namespace SchedulePlanner.Controllers
             if (ModelState.IsValid)
             {
                 var user = await userManager.GetUserAsync(User);
-                // Сохранение в БД
                 var subject = new Subject
                 {
                     Id = Guid.NewGuid(),
@@ -118,10 +117,11 @@ namespace SchedulePlanner.Controllers
                     Color = model.Color
                 };
                 subjectRepository.Add(subject);
-                return Json(new { success = true });
+
+                return Json(new { success = true, id = subject.Id, name = subject.Name });
             }
-            // Возвращаем форму с ошибками
-            return PartialView("_AddSubjectForm", model);
+
+            return PartialView("_AddSubjectForm", model); // Если есть ошибки — вернуть HTML
         }
     }
 }

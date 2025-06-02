@@ -50,7 +50,7 @@
         <span asp-validation-for="DurationMinutes" class="text-danger"></span>
     </div>
 
-    <div class="form-group mb-3">
+    <!--<div class="form-group mb-3">
         <label asp-for="Location" class="form-label"></label>
         <input asp-for="Location" class="form-control" />
         <span asp-validation-for="Location" class="text-danger"></span>
@@ -62,11 +62,11 @@
             <option value="">-- Без преподавателя --</option>
         </select>
         <span asp-validation-for="TeacherId" class="text-danger"></span>
-    </div>
+    </div>-->
 
     <div class="form-group mt-3">
         <input type="submit" value="Сохранить" class="btn btn-primary" />
-        <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Отмена</a>
     </div>
 </form>
 
@@ -91,57 +91,35 @@
     </div>
 </div>
 
+
 @section Scripts {
     <script>
-        $(document).ready(function() {
-            // Обработчик выбора "Добавить новый предмет"
-            $('#subjectSelect').change(function() {
-                if ($(this).val() === "add_new") {
-                    // Открываем модальное окно
-                    $('#subjectModal').modal('show');
-                    // Загружаем форму добавления предмета
-                    $('#subjectModalBody').load('@Url.Action("LoadSubjectForm", "Lesson")');
-                    // Сбрасываем выбор
-                    $(this).val('');
-                }
-            });
+        $("#subjectSelect").change(function () {
+            if ($(this).val() === "add_new") {
+                $.get('/Lesson/LoadSubjectForm', function (html) {
+                    $("#subjectModalBody").html(html);
+                    $("#subjectModal").modal("show");
 
-            // Обработчик сохранения предмета
-            $('#saveSubjectBtn').click(function() {
-                var form = $('#addSubjectForm');
+                    // Обработчик кнопки сохранения
+                    $("#saveSubjectBtn").off("click").on("click", function () {
+                        const form = $("#subjectModalBody").find("form");
+                        const formData = form.serialize();
 
-                $.ajax({
-                    url: form.attr('action'),
-                    type: 'POST',
-                    data: form.serialize(),
-                    headers: {
-                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#subjectModal').modal('hide');
-                            // Обновляем список предметов
-                            $.get('@Url.Action("GetSubjects", "Lesson")', function(data) {
-                                $('#subjectSelect').empty();
-                                $('#subjectSelect').append('<option value="">-- Выберите предмет --</option>');
-                                $('#subjectSelect').append('<option value="add_new">Добавить новый предмет</option>');
-                                $.each(data, function(index, item) {
-                                    $('#subjectSelect').append($('<option>', {
-                                        value: item.value,
-                                        text: item.text
-                                    }));
-                                });
+                        $.post('/Lesson/AddSubject', formData)
+                            .done(function (response) {
+                                if (response.success) {
+                                    // Добавляем новый предмет в выпадающий список
+                                    const option = new Option(response.name, response.id, true, true);
+                                    $("#subjectSelect").append(option).val(response.id);
+                                    $("#subjectModal").modal("hide");
+                                } else {
+                                    // Ошибка валидации — обновляем форму
+                                    $("#subjectModalBody").html(response);
+                                }
                             });
-                            alert("Предмет успешно добавлен!");
-                        } else {
-                            $('#subjectModalBody').html(response);
-                        }
-                    },
-                    error: function(xhr) {
-                        alert("Ошибка при сохранении предмета: " + xhr.statusText);
-                    }
+                    });
                 });
-            });
+            }
         });
     </script>
 }

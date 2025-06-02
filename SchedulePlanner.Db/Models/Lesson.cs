@@ -50,7 +50,7 @@ namespace SchedulePlanner.Db.Models
     }
     public enum RecurrenceType
     {
-        None = 0,           // Без повторения
+        Everyday = 1,           // Каждый день
         Weekly = 7,         // Каждую неделю
         BiWeekly = 14       // Каждые 2 недели
     }

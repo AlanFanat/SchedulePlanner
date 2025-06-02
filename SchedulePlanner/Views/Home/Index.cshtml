@@ -12,7 +12,7 @@
         <div id="calendar"></div>
     </div>
     <div class="col-md-8">
-        <div>Занятия</div>
+        <h3>Занятия</h3>
         <div id="lessonsContainer" class="mt-4">
             @if (Model == null || Model.Count == 0)
             {
@@ -25,7 +25,8 @@
                     <a class="lesson-link" href="@Url.Action("Index", "Lesson", new { lessonId = lesson.Id})">
                         <div class="card mb-2">
                             <div class="card-body">
-                                <strong>@lesson.SubjectName</strong><br />
+                                <h5><strong><font color="@lesson.Subject.Color">@lesson.SubjectName</font></strong></h5>
+                                @lesson.LessonType <br />
                                 @lesson.StartTime.ToString(@"hh\:mm") - @lesson.EndTime.ToString(@"hh\:mm")
                             </div>
                         </div>
@@ -33,7 +34,7 @@
                 }
             }
         </div>
-        <a class="btn btn-primary mt-3" href="@Url.Action("Create", "Lesson", new { date = ViewBag.SelectedDate.ToString("yyyy-MM-dd") })">Добавить предмет</a>
+        <a class="btn btn-primary mt-3" href="@Url.Action("Create", "Lesson", new { date = ViewBag.SelectedDate.ToString("yyyy-MM-dd") })">Добавить занятие</a>
 
     </div>
 </div>

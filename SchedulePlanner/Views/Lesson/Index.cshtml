@@ -1,57 +1,67 @@
 ﻿@model LessonViewModel
 
 @{
-    ViewData["Title"] = "Информация о предмете";
+    ViewData["Title"] = "Информация о занятии";
 }
 
-
-
-<h2>@ViewData["Title"]</h2>
-
-<div class="card">
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">Предмет</dt>
-            <dd class="col-sm-9">@Model.Subject?.Name</dd>
-
-            <dt class="col-sm-3">Тип занятия</dt>
-            <dd class="col-sm-9">@Model.LessonType</dd>
-
-            <dt class="col-sm-3">Периодичность</dt>
-            <dd class="col-sm-9">@Model.RecurrenceType</dd>
-
-            <dt class="col-sm-3">Дата первого занятия</dt>
-            <dd class="col-sm-9">@Model.StartDate.ToShortDateString()</dd>
-
-            <dt class="col-sm-3">Дата последнего занятия</dt>
-            <dd class="col-sm-9">@Model.EndDate.ToShortDateString()</dd>
-
-            <dt class="col-sm-3">Количество повторений</dt>
-            <dd class="col-sm-9">@Model.RepeatsCount</dd>
-
-            <dt class="col-sm-3">Начало занятия</dt>
-            <dd class="col-sm-9">@Model.StartTime</dd>
-
-            <dt class="col-sm-3">Конец занятия</dt>
-            <dd class="col-sm-9">@Model.EndTime</dd>
-
-            <dt class="col-sm-3">Длительность (минут)</dt>
-            <dd class="col-sm-9">@Model.DurationMinutes</dd>
-
-            <dt class="col-sm-3">Место проведения</dt>
-            <dd class="col-sm-9">@Model.Location</dd>
-
-            <dt class="col-sm-3">Преподаватель</dt>
-            <dd class="col-sm-9">@Model.Teacher?.Name</dd>
-        </dl>
+<div class="container my-4">
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-header bg-primary text-white text-center">
+            <h5 class="card-title mb-0">Информация о занятии</h5>
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>Предмет</strong>
+                    <span>@Model.SubjectName</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>Тип занятия</strong>
+                    <span>@Model.LessonType</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>Периодичность</strong>
+                    <span>@Model.RecurrenceType</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>Дата первого занятия</strong>
+                    <span>@Model.StartDate.ToShortDateString()</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>Дата последнего занятия</strong>
+                    <span>@Model.EndDate.ToShortDateString()</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>Количество занятий</strong>
+                    <span>@Model.RepeatsCount</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>Начало занятия</strong>
+                    <span>@Model.StartTime</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>Конец занятия</strong>
+                    <span>@Model.EndTime</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>Длительность</strong>
+                    <span>@Model.DurationMinutes минут</span>
+                </li>
+            </ul>
+        </div>
+        <div class="card-footer text-center bg-white">
+            <a asp-controller="Home" asp-action="Index" asp-route-date="" class="btn btn-primary btn-sm">
+                Назад к расписанию
+            </a>
+            <a asp-action="Edit" asp-route-lessonId="@Model.Id" asp-route-date="" class="btn btn-outline-primary btn-sm">
+                Редактировать
+            </a>
+            <a asp-action="Delete" asp-route-lessonId="@Model.Id" asp-route-date="" class="btn btn-danger btn-sm">
+                Удалить
+            </a>
+        </div>
     </div>
 </div>
 
 
-<a asp-controller="Home" asp-action="Index" asp-route-date="" class="btn btn-primary mt-3">
-    Назад к расписанию
-</a>
-<a asp-action="Edit" asp-route-lessonId="@Model.Id" asp-route-date="" class="btn btn-warning mt-3">
-    Редактировать
-</a>
 
