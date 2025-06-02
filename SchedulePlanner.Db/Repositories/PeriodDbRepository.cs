@@ -49,7 +49,23 @@ namespace SchedulePlanner.Db.Repositories
             _context.Periods.Update(period);
             _context.SaveChanges();
         }
+        public void Edit(Period model)
+        {
+            // 1. Находим существующий объект
+            var existingPeriod = _context.Periods
+                .FirstOrDefault(p => p.Id == model.Id);
 
+            if (existingPeriod != null)
+            {
+                // 2. Обновляем свойства
+                existingPeriod.Name = model.Name;
+                existingPeriod.StartDate = model.StartDate;
+                existingPeriod.EndDate = model.EndDate;
+
+                // 3. Сохраняем
+                _context.SaveChanges();
+            }
+        }
         public void Delete(Guid id)
         {
             var period = _context.Periods.Find(id);

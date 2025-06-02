@@ -6,19 +6,81 @@
 else
 {
     <h2>Выберите период</h2>
+    @foreach (var period in Model)
+    {
+        <div class="card period-card mb-2 @(period.Id == ViewBag.SelectedPeriodId ? "period-active" : "")">
+            <div class="card-body d-flex flex-row align-items-center justify-content-between">
+                <div>
+                    <strong>@period.Name</strong><br />
+                    @period.StartDate.ToShortDateString() - @period.EndDate.ToShortDateString()
+                </div>
+                <div>
+                    <a class="btn btn-outline-info btn-sm"
+                       href="@Url.Action("Select", "Period", new { periodId = period.Id })">
+                        Выбрать
+                    </a>
+                    <a class="btn btn-outline-primary btn-sm"
+                       href="@Url.Action("Edit", "Period", new { periodId = period.Id })">
+                        Редактировать
+                    </a>
+                    <a class="btn btn-outline-danger btn-sm"
+                       href="@Url.Action("Delete", "Period", new { periodId = period.Id })"
+                       onclick="return confirm('Вы уверены, что хотите удалить этот период?');">
+                        Удалить
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
 
-    <ul>
-        @foreach (var period in Model)
-        {
-            <li>
-                @period.Name (@period.StartDate.ToShortDateString() - @period.EndDate.ToShortDateString())
-                <form asp-action="Select" asp-controller="Period" method="post">
-                    <input type="hidden" name="periodId" value="@period.Id" />
-                    <button type="submit">Выбрать</button>
-                </form>
-            </li>
-        }
-    </ul>
+
+
+
 }
 
 <a asp-action="Create" asp-controller="Period">Создать новый период</a>
+
+<style>
+    .period-active {
+        background-color: rgba(13, 110, 253, 0.1) !important; /* Слегка выделенный фон */
+    }
+</style>
+
+<script>
+    let selectedPeriod = null;
+
+    function handlePeriodClick(cardElement, periodName) {
+        // Снимаем выделение со всех карточек
+        document.querySelectorAll('.period-card').forEach(card => {
+            card.classList.remove('active');
+        });
+
+        // Добавляем выделение текущей карточке
+        cardElement.classList.add('active');
+        selectedPeriod = periodName;
+
+        // Отправка запроса на сервер
+        fetch('/YourController/YourMethod', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: periodName })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+                // Дополнительные действия после успешного запроса
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Отменяем выделение при ошибке
+                cardElement.classList.remove('active');
+            });
+    }
+</script>

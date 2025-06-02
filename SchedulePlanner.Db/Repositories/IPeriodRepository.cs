@@ -11,6 +11,7 @@ namespace SchedulePlanner.Db.Repositories
         List<Period> GetByUserId(Guid userId);
         void Add(Period period);
         void Update(Period period);
+        void Edit(Period model);
         void Delete(Guid id);
     }
 }
