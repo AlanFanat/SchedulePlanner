@@ -42,7 +42,7 @@ namespace SchedulePlanner.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> CreateAsync()
+        public async Task<IActionResult> CreateAsync(DateTime? date)
         {
             var user = await userManager.GetUserAsync(User);
             var periodId = user.SelectedPeriodId.GetValueOrDefault();
@@ -56,6 +56,7 @@ namespace SchedulePlanner.Controllers
 
             var model = new LessonViewModel
             {
+                StartDate = date ?? DateTime.Now,
                 PeriodId = periodId,
                 Subjects = subjects1
             };
@@ -122,6 +123,11 @@ namespace SchedulePlanner.Controllers
             }
 
             return PartialView("_AddSubjectForm", model); // Если есть ошибки — вернуть HTML
+        }
+        public async Task<IActionResult> DeleteAsync(Guid lessonId)
+        {
+            lessonRepository.Delete(lessonId);
+            return RedirectToAction("Index", "Home");
         }
     }
 }

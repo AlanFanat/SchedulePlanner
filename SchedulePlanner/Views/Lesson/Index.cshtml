@@ -53,10 +53,10 @@
             <a asp-controller="Home" asp-action="Index" asp-route-date="" class="btn btn-primary btn-sm">
                 Назад к расписанию
             </a>
-            <a asp-action="Edit" asp-route-lessonId="@Model.Id" asp-route-date="" class="btn btn-outline-primary btn-sm">
+            <!--<a asp-action="Edit" asp-route-lessonId="" asp-route-date="" class="btn btn-outline-primary btn-sm">
                 Редактировать
-            </a>
-            <a asp-action="Delete" asp-route-lessonId="@Model.Id" asp-route-date="" class="btn btn-danger btn-sm">
+            </a>-->
+            <a asp-action="Delete" asp-route-lessonId="@Model.Id" asp-route-date="" class="btn btn-danger btn-sm" onclick="return confirm('Вы уверены, что хотите удалить это занятие?');">
                 Удалить
             </a>
         </div>
