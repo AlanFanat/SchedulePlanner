@@ -1,14 +1,15 @@
 ﻿@model LessonViewModel
 
-<h2>Create Lesson</h2>
+<h2>Создать занятие</h2>
 
 <form asp-controller="Lesson" asp-action="Create" method="post" id="mainForm">
     <div class="form-group">
         <label asp-for="SubjectIdRaw"></label>
         <select id="subjectSelect" asp-for="SubjectIdRaw" class="form-control" asp-items="Model.Subjects">
-            <option value="add_new">--Выберите предмет--</option>
+            <option value="infoselect">--Выберите предмет--</option>
             <option value="add_new">Добавить новый предмет</option>
         </select>
+        <span asp-validation-for="SubjectIdRaw" class="text-danger"></span>
     </div>
     <div class="form-group mb-3">
         <label asp-for="LessonType" class="form-label"></label>

@@ -87,6 +87,7 @@ namespace SchedulePlanner.Controllers
             if(user.SelectedPeriodId == periodId)
             {
                 user.SelectedPeriodId = null;
+                await userManager.UpdateAsync(user);
             }
             periodRepository.Delete(periodId);
             return RedirectToAction("Index");
