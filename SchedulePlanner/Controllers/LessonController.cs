@@ -129,5 +129,94 @@ namespace SchedulePlanner.Controllers
             lessonRepository.Delete(lessonId);
             return RedirectToAction("Index", "Home");
         }
+
+        public async Task<IActionResult> Edit(Guid lessonId)
+        {
+            var lesson = lessonRepository.GetById(lessonId);
+            if (lesson == null)
+            {
+                return NotFound();
+            }
+
+            var user = await userManager.GetUserAsync(User);
+            var periodId = user.SelectedPeriodId.GetValueOrDefault();
+            var subjects = subjectRepository.GetByPeriodId(periodId);
+            var teachers = teacherRepository.GetByPeriodId(periodId);
+
+            var viewModel = LessonViewModel.FromModel(lesson);
+            viewModel.Subjects = subjects
+                .Select(s => new SelectListItem
+                {
+                    Value = s.Id.ToString(),
+                    Text = s.Name
+                }).ToList();
+            viewModel.Teachers = teachers
+                .Select(t => new SelectListItem
+                {
+                    Value = t.Id.ToString(),
+                    Text = t.Name
+                }).ToList();
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid lessonId, LessonViewModel model)
+        {
+            if (lessonId != model.Id)
+            {
+                return NotFound();
+            }
+
+            Guid subjectId;
+            if (!Guid.TryParse(model.SubjectIdRaw, out subjectId))
+            {
+                ModelState.AddModelError("SubjectIdRaw", "Выберите предмет");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var user = await userManager.GetUserAsync(User);
+                var periodId = user.SelectedPeriodId.GetValueOrDefault();
+                var subjects = subjectRepository.GetByPeriodId(periodId);
+                var teachers = teacherRepository.GetByPeriodId(periodId);
+
+                model.Subjects = subjects
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.Id.ToString(),
+                        Text = s.Name
+                    }).ToList();
+                model.Teachers = teachers
+                    .Select(t => new SelectListItem
+                    {
+                        Value = t.Id.ToString(),
+                        Text = t.Name
+                    }).ToList();
+
+                return View(model);
+            }
+
+            var lesson = lessonRepository.GetById(lessonId);
+            if (lesson == null)
+            {
+                return NotFound();
+            }
+
+            lesson.SubjectId = subjectId;
+            lesson.LessonType = model.LessonType;
+            lesson.RecurrenceType = model.RecurrenceType;
+            lesson.StartDate = model.StartDate;
+            lesson.RepeatsCount = model.RepeatsCount;
+            lesson.StartTime = model.StartTime;
+            lesson.DurationMinutes = model.DurationMinutes;
+            lesson.Location = model.Location;
+            lesson.TeacherId = model.TeacherId;
+
+            lessonRepository.Update(lesson);
+
+            return RedirectToAction("Index", new { lessonId = lesson.Id });
+        }
     }
 }

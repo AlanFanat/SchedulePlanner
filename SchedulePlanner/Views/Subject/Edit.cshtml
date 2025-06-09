@@ -4,36 +4,29 @@
     ViewData["Title"] = "Редактировать предмет";
 }
 
-<div class="container">
-    <h1>Редактировать предмет</h1>
+<h2>Редактировать предмет</h2>
 
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="Edit">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="Id" />
-                <input type="hidden" asp-for="PeriodId" />
-                
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label">Название</label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                
-                <div class="form-group">
-                    <label asp-for="Color" class="control-label">Цвет</label>
-                    <input type="color" asp-for="Color" class="form-control" />
-                    <span asp-validation-for="Color" class="text-danger"></span>
-                </div>
-                
-                <div class="form-group">
-                    <input type="submit" value="Сохранить" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-secondary">Назад к списку</a>
-                </div>
-            </form>
-        </div>
+<form asp-controller="Subject" asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" value="@Model.Id" />
+    <input type="hidden" asp-for="PeriodId" value="@Model.PeriodId" />
+
+    <div class="form-group mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" value="@Model.Name" class="form-control" type="text" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-</div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Color" class="form-label"></label>
+        <input asp-for="Color" value="@Model.Color" class="form-control" type="color" />
+        <span asp-validation-for="Color" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-3">
+        <input type="submit" value="Сохранить" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+    </div>
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

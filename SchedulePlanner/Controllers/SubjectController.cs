@@ -26,6 +26,32 @@ namespace SchedulePlanner.Controllers
             return View(subjects);
         }
 
+        public async Task<IActionResult> Create()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var periodId = user.SelectedPeriodId.GetValueOrDefault();
+            
+            var subject = new Subject
+            {
+                PeriodId = periodId
+            };
+            
+            return View(subject);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Subject subject)
+        {
+            if (ModelState.IsValid)
+            {
+                subject.Id = Guid.NewGuid();
+                _subjectRepository.Add(subject);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(subject);
+        }
+
         public IActionResult Edit(Guid id)
         {
             var subject = _subjectRepository.GetById(id);

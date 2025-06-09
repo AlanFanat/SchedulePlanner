@@ -1,5 +1,134 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@model LessonViewModel
+
 @{
+    ViewData["Title"] = "Редактировать занятие";
+}
+
+<h2>Редактировать занятие</h2>
+
+<form asp-controller="Lesson" asp-action="Edit" asp-route-lessonId="@Model.Id" method="post" id="mainForm">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="PeriodId" />
+
+    <div class="form-group">
+        <label asp-for="SubjectIdRaw"></label>
+        <select id="subjectSelect" asp-for="SubjectIdRaw" class="form-control" asp-items="Model.Subjects">
+            <option value="infoselect">--Выберите предмет--</option>
+            <option value="add_new">Добавить новый предмет</option>
+        </select>
+        <span asp-validation-for="SubjectIdRaw" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="LessonType" class="form-label"></label>
+        <select asp-for="LessonType" asp-items="Html.GetEnumSelectList<LessonType>()" class="form-control">
+        </select>
+        <span asp-validation-for="LessonType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="RecurrenceType" class="form-label"></label>
+        <select asp-for="RecurrenceType" asp-items="Html.GetEnumSelectList<RecurrenceType>()" class="form-control">
+        </select>
+        <span asp-validation-for="RecurrenceType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="StartDate" class="form-label"></label>
+        <input asp-for="StartDate" value="@Model.StartDate.ToString("yyyy-MM-dd")" class="form-control" type="date" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="RepeatsCount" class="form-label"></label>
+        <input asp-for="RepeatsCount" class="form-control" />
+        <span asp-validation-for="RepeatsCount" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="StartTime" class="form-label"></label>
+        <input asp-for="StartTime" class="form-control" type="time" />
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="DurationMinutes" class="form-label"></label>
+        <input asp-for="DurationMinutes" class="form-control" type="number" min="10" max="300" />
+        <span asp-validation-for="DurationMinutes" class="text-danger"></span>
+    </div>
+
+    <!--<div class="form-group mb-3">
+        <label asp-for="Location" class="form-label"></label>
+        <input asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="TeacherId" class="form-label"></label>
+        <select asp-for="TeacherId" asp-items="Model.Teachers" class="form-control">
+            <option value="">-- Без преподавателя --</option>
+        </select>
+        <span asp-validation-for="TeacherId" class="text-danger"></span>
+    </div>-->
+
+    <div class="form-group mt-3">
+        <input type="submit" value="Сохранить" class="btn btn-primary" />
+        <a asp-action="Index" asp-route-lessonId="@Model.Id" class="btn btn-secondary">Отмена</a>
+    </div>
+</form>
+
+<!-- Модальное окно для добавления предмета -->
+<div class="modal fade" id="subjectModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавить новый предмет</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="subjectModalBody">
+                <!-- Здесь будет загружена форма добавления предмета -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" id="saveSubjectBtn">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $("#subjectSelect").change(function () {
+            if ($(this).val() === "add_new") {
+                $.get('/Lesson/LoadSubjectForm', function (html) {
+                    $("#subjectModalBody").html(html);
+                    $("#subjectModal").modal("show");
+
+                    // Обработчик кнопки сохранения
+                    $("#saveSubjectBtn").off("click").on("click", function () {
+                        const form = $("#subjectModalBody").find("form");
+                        const formData = form.serialize();
+
+                        $.post('/Lesson/AddSubject', formData)
+                            .done(function (response) {
+                                if (response.success) {
+                                    // Добавляем новый предмет в выпадающий список
+                                    const option = new Option(response.name, response.id, true, true);
+                                    $("#subjectSelect").append(option).val(response.id);
+                                    $("#subjectModal").modal("hide");
+                                } else {
+                                    // Ошибка валидации — обновляем форму
+                                    $("#subjectModalBody").html(response);
+                                }
+                            });
+                    });
+                });
+            }
+        });
+    </script>
 }
