@@ -26,6 +26,9 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Period" asp-action="Index">Периоды</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Subject" asp-action="Index">Предметы</a>
+                        </li>
+                        <li class="nav-item">
                             <form asp-controller="Account" asp-action="Logout" method="post" class="form-inline">
                                 @Html.AntiForgeryToken()
                                 <button type="submit" class="nav-link btn btn-link text-dark" style="border: none;">Выйти</button>
