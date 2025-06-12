@@ -37,8 +37,8 @@ namespace SchedulePlanner.Controllers
             var user = await userManager.GetUserAsync(User); // Получаем текущего пользователя
             if (user != null)
             {
-                var userId = user.Id;       // ID пользователя
-                var userName = user.UserName; // Имя пользователя
+                //var userId = user.Id;       // ID пользователя
+                //var userName = user.UserName; // Имя пользователя
                 var periodId = user.SelectedPeriodId.GetValueOrDefault(); //Выбранный период
                 if (periodId == Guid.Empty)
                 {
@@ -48,7 +48,7 @@ namespace SchedulePlanner.Controllers
                 var lessonViewModels = lessons.Select(lesson => LessonViewModel.FromModel(lesson)).ToList();
                 return View(lessonViewModels);
             }
-            _logger.LogWarning("User not found.");
+            _logger.LogWarning("Пользователь не найден");
             return NotFound();
         }
 

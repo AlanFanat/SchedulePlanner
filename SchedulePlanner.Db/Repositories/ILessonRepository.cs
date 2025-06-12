@@ -13,5 +13,6 @@ namespace SchedulePlanner.Db.Repositories
         void Add(Lesson lesson);
         void Update(Lesson lesson);
         void Delete(Guid id);
+        bool HasSubject(Guid subjectId);
     }
 }

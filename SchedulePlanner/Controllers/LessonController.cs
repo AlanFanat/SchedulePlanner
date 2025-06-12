@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SchedulePlanner.Db.Models;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace SchedulePlanner.Controllers
 {
+    [Authorize]
     public class LessonController : Controller
     {
         private readonly IScheduleService scheduleService;
@@ -124,7 +126,7 @@ namespace SchedulePlanner.Controllers
 
             return PartialView("_AddSubjectForm", model); // Если есть ошибки — вернуть HTML
         }
-        public async Task<IActionResult> DeleteAsync(Guid lessonId)
+        public IActionResult Delete(Guid lessonId)
         {
             lessonRepository.Delete(lessonId);
             return RedirectToAction("Index", "Home");
@@ -144,7 +146,7 @@ namespace SchedulePlanner.Controllers
             var teachers = teacherRepository.GetByPeriodId(periodId);
 
             var viewModel = LessonViewModel.FromModel(lesson);
-            viewModel.Subjects = subjects
+            /*viewModel.Subjects = subjects
                 .Select(s => new SelectListItem
                 {
                     Value = s.Id.ToString(),
@@ -155,7 +157,7 @@ namespace SchedulePlanner.Controllers
                 {
                     Value = t.Id.ToString(),
                     Text = t.Name
-                }).ToList();
+                }).ToList();*/
 
             return View(viewModel);
         }

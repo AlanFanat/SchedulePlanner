@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SchedulePlanner.Db.Models;
 using SchedulePlanner.Db.Repositories;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace SchedulePlanner.Controllers
 {
+    [Authorize]
     public class PeriodController : Controller
     {
         private readonly UserManager<User> userManager;

@@ -33,7 +33,7 @@
 
     <div class="form-group mb-3">
         <label asp-for="RepeatsCount" class="form-label"></label>
-        <input asp-for="RepeatsCount" class="form-control" />
+        <input asp-for="RepeatsCount" class="form-control" min="1" max="300"/>
         <span asp-validation-for="RepeatsCount" class="text-danger"></span>
     </div>
 

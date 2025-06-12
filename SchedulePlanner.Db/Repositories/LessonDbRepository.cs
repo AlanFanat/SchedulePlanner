@@ -62,5 +62,11 @@ namespace SchedulePlanner.Db.Repositories
                 _context.SaveChanges();
             }
         }
+
+        public bool HasSubject(Guid subjectId)
+        {
+            var hasSubject = _context.Lessons.Any(lesson => lesson.SubjectId == subjectId);
+            return hasSubject;
+        }
     }
 }

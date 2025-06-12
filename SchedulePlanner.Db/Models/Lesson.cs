@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -29,7 +30,7 @@ namespace SchedulePlanner.Db.Models
         public Teacher Teacher { get; set; }
 
         [NotMapped]
-        public DateTime EndDate => StartDate.AddDays( (int)RecurrenceType * RepeatsCount);    
+        public DateTime EndDate => StartDate.AddDays( (int)RecurrenceType * (RepeatsCount-1));    
         [NotMapped]
         public TimeSpan EndTime => StartTime + TimeSpan.FromMinutes(DurationMinutes);
         [NotMapped]
@@ -39,19 +40,39 @@ namespace SchedulePlanner.Db.Models
     }
     public enum LessonType
     {
+        [Display(Name = "Лекция")]
         Lecture,
+
+        [Display(Name = "Практика")]
         Practice,
+
+        [Display(Name = "Лабораторная работа")]
         Laboratory,
+
+        [Display(Name = "Семинар")]
         Seminar,
+
+        [Display(Name = "Консультация")]
         Consultation,
+
+        [Display(Name = "Контрольная работа")]
         Test,
+
+        [Display(Name = "Экзамен")]
         Exam,
+
+        [Display(Name = "Зачёт")]
         Credit
     }
     public enum RecurrenceType
     {
-        Everyday = 1,           // Каждый день
-        Weekly = 7,         // Каждую неделю
-        BiWeekly = 14       // Каждые 2 недели
+        [Display(Name = "Каждый день")]
+        Everyday = 1,
+
+        [Display(Name = "Каждую неделю")]
+        Weekly = 7,
+
+        [Display(Name = "Каждые 2 недели")]
+        BiWeekly = 14
     }
 }

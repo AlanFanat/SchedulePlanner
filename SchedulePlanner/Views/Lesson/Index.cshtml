@@ -17,11 +17,11 @@
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <strong>Тип занятия</strong>
-                    <span>@Model.LessonType</span>
+                    <span>@Model.LessonType.GetDisplayName()</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <strong>Периодичность</strong>
-                    <span>@Model.RecurrenceType</span>
+                    <span>@Model.RecurrenceType.GetDisplayName()</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <strong>Дата первого занятия</strong>
